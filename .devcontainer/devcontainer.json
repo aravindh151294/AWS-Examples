@@ -11,9 +11,6 @@
 		"dockerfile": "Dockerfile"
 	},
 	"remoteEnv": {
-		"AWS_ACCESS_KEY_ID": "${localEnv:AWS_ACCESS_KEY_ID}",
-		"AWS_SECRET_ACCESS_KEY": "${localEnv:AWS_SECRET_ACCESS_KEY}",
-		"AWS_DEFAULT_REGION": "${localEnv:AWS_DEFAULT_REGION}",
 		"AWS_CLI_AUTO_PROMPT": "on-partial"
 	}
 	// AWS CLI is installed in the image via the Dockerfile; no post-create steps required
