@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+echo "== sync Objects"
+
+# Check for bucket name
+if [ -z "$1" ]; then
+    echo "There needs to be a bucket name eg. ./bucket my-bucket-name"
+    exit 1
+fi
+
+# 1. Define the folder name
+FOLDER_NAME="/tmp/s3-bash-scripts"
+
+# 2. Create the folder (the -p flag prevents errors if it already exists)
+mkdir -p "$FOLDER_NAME"
+
+# Remove folder if it already exists
+rm -r $OUTPUT_DIR
+
+# 3. Decide how many files to create (Random number between 5 and 10)
+NUM_FILES=$(( ( RANDOM % 6 )  + 5 ))
+
+echo "Creating $NUM_FILES files in folder: $FOLDER_NAME"
+
+# 4. Loop to generate files
+for i in $(seq 1 $NUM_FILES); do
+    FILENAME="$FOLDER_NAME/sample_data_$i.txt"
+    
+    # Generate some random text for the file
+    echo "Generated on $(date)" > "$FILENAME"
+    echo "Random ID: $RANDOM" >> "$FILENAME"
+    echo "This is file number $i in the batch." >> "$FILENAME"
+done
+
+echo "---"
+tree $FOLDER_NAME
+echo "Done! Use 'ls $FOLDER_NAME' to see your files."
+
+aws s3 sync $FOLDER_NAME s3://$1/files
